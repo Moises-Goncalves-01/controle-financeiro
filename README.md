@@ -26,9 +26,6 @@ Aplicacao web para registrar renda, acompanhar gastos mensais e separar valores 
 - Banco local: SQLite
 - Graficos: Chart.js
 
-## Prints do sistema
-
-Voce pode adicionar depois os prints reais das telas em `docs/screenshots/` para complementar a apresentacao do projeto no GitHub.
 
 ## Estrutura publica do projeto
 
