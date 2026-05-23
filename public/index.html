@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Finanças Pessoal</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <div class="header-text">
+          <h1>💰 Controle de Gastos</h1>
+          <p>Gerencie seus gastos mensais com facilidade</p>
+        </div>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle-btn" title="Alternar tema">
+            🌙
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="income">Renda</button>
+      <button class="tab-btn" data-tab="add-expense">Adicionar Gasto</button>
+      <button class="tab-btn" data-tab="categories">Categorias</button>
+      <button class="tab-btn" data-tab="piggy-bank">🏦 Cofre</button>
+      <button class="tab-btn" data-tab="history">Histórico</button>
+      <button class="tab-btn" data-tab="comparison">Comparação</button>
+    </nav>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="tab-content active">
+      <div class="dashboard-header">
+        <div class="month-selector">
+          <button id="prev-month" class="nav-btn">◀</button>
+          <input type="month" id="current-month">
+          <button id="next-month" class="nav-btn">▶</button>
+        </div>
+      </div>
+
+      <!-- Resumo do Mês -->
+      <div class="month-summary">
+        <div class="summary-header">
+          <h2>📊 Resumo do Mês</h2>
+          <span id="current-month-label" class="month-label">Abril 2026</span>
+        </div>
+      </div>
+
+      <!-- Cards Principais -->
+      <div class="dashboard-grid">
+        <div class="card income-card">
+          <div class="card-icon">💵</div>
+          <h3>Renda do Mês</h3>
+          <p id="total-income" class="amount">R$ 0,00</p>
+          <span id="dashboard-income-source" class="card-subtitle">Sem renda registrada</span>
+        </div>
+
+        <div class="card total-card">
+          <div class="card-icon">💸</div>
+          <h3>Total Gasto</h3>
+          <p id="total-spent" class="amount">R$ 0,00</p>
+          <span id="spent-percentage" class="card-subtitle">0% da renda</span>
+        </div>
+
+        <div class="card budget-card">
+          <div class="card-icon">🏦</div>
+          <h3>Cofre Total</h3>
+          <p id="piggy-bank-total" class="amount">R$ 0,00</p>
+          <p id="saved-percentage" class="card-subtitle" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">📈 0% da renda</p>
+        </div>
+
+        <div class="card remaining-card">
+          <div class="card-icon">💳</div>
+          <h3>Saldo Final</h3>
+          <p id="real-balance" class="amount">R$ 0,00</p>
+          <span id="real-balance-status" class="card-subtitle">Após cofre</span>
+        </div>
+      </div>
+
+      <!-- Gráficos e Lista -->
+      <div class="dashboard-bottom">
+        <div class="chart-container overview-chart-panel">
+          <div class="overview-chart-header">
+            <div>
+              <span class="overview-chart-kicker">Dashboard financeiro</span>
+              <h3>Receitas x Despesas</h3>
+            </div>
+            <p id="overview-chart-caption" class="overview-chart-caption">Comparativo dos últimos meses</p>
+          </div>
+          <div class="overview-chart-canvas">
+            <canvas id="monthlyOverviewChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>📊 Gastos por Categoria</h3>
+            <span id="chart-total" class="chart-total">Total: R$ 0,00</span>
+          </div>
+          <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="expenses-list">
+          <div class="expenses-header">
+            <h3>💳 Gastos deste mês</h3>
+            <span id="expense-count-label" class="expense-count-label">0 gastos</span>
+          </div>
+          <div id="month-expenses" class="expenses-grid">
+            <p class="empty-message">Nenhum gasto registrado neste mês</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Renda -->
+    <section id="income" class="tab-content">
+      <div class="form-container">
+        <h2>💵 Registrar Renda Mensal</h2>
+        
+        <form id="income-form">
+          <div class="form-group">
+            <label for="income-month">Mês</label>
+            <input type="month" id="income-month" required>
+          </div>
+
+          <div class="form-group">
+            <label for="income-value">Renda (R$)</label>
+            <input type="number" id="income-value" placeholder="0,00" step="0.01" min="0" required>
+          </div>
+
+          <div class="form-group">
+            <label for="income-source">Fonte de Renda</label>
+            <input type="text" id="income-source" placeholder="Ex: Salário, Freelancer, etc" value="Salário">
+          </div>
+
+          <button type="submit" class="btn-primary">Registrar Renda</button>
+        </form>
+
+        <div id="income-info" class="info-card" style="display: none;">
+          <h3>Renda Registrada</h3>
+          <p>Mês: <span id="income-info-month">-</span></p>
+          <p>Renda: <span id="income-info-value">R$ 0,00</span></p>
+          <p>Fonte: <span id="income-info-source">-</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Adicionar Gasto -->
+    <section id="add-expense" class="tab-content">
+      <div class="form-container">
+        <h2>Adicionar Novo Gasto</h2>
+        
+        <form id="expense-form">
+          <div class="form-group">
+            <label for="expense-description">Descrição</label>
+            <input type="text" id="expense-description" placeholder="Ex: Compras no mercado" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expense-amount">Valor (R$)</label>
+              <input type="number" id="expense-amount" placeholder="0,00" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="expense-category">Categoria</label>
+              <select id="expense-category" required>
+                <option value="">Selecione uma categoria</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expense-date">Data</label>
+            <input type="date" id="expense-date" required>
+          </div>
+
+          <button type="submit" class="btn-primary">Adicionar Gasto</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Categorias -->
+    <section id="categories" class="tab-content">
+      <div class="form-container">
+        <h2>🏷️ Gerenciar Categorias</h2>
+        
+        <form id="category-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category-name">Nome da Categoria</label>
+              <input type="text" id="category-name" placeholder="Ex: Supermercado, Uber, etc" required>
+            </div>
+
+            <div class="form-group">
+              <label for="category-color">Cor</label>
+              <input type="color" id="category-color" value="#3498db">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Criar Categoria</button>
+        </form>
+
+        <div class="categories-list">
+          <h3>Minhas Categorias</h3>
+          <div id="categoriesContainer" class="categories-grid">
+            <p class="empty-message">Carregando categorias...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cofre -->
+    <section id="piggy-bank" class="tab-content">
+      <div class="form-container">
+        <h2>🏦 Meu Cofre - Guardar Dinheiro</h2>
+        
+        <form id="piggy-form">
+          <div class="form-group">
+            <label for="piggy-description">Descrição (Ex: Viagem, Carro)</label>
+            <input type="text" id="piggy-description" placeholder="O que você quer guardar?" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="piggy-amount">Valor (R$)</label>
+              <input type="number" id="piggy-amount" placeholder="0,00" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label for="piggy-category">Categoria</label>
+              <select id="piggy-category" required>
+                <option value="">Selecione uma categoria</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="piggy-priority">Prioridade</label>
+            <select id="piggy-priority" required>
+              <option value="Baixa">Baixa - Lazer/Diversão</option>
+              <option value="Normal">Normal - Planejado</option>
+              <option value="Alta">Alta - Importante</option>
+              <option value="Crítica">Crítica - Emergência</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary">Adicionar ao Cofre 🏦</button>
+        </form>
+
+        <div class="piggy-summary">
+          <h3>📊 Resumo do Cofre</h3>
+          <div id="piggy-info" class="info-card">
+            <div class="piggy-stat">
+              <span>Total Guardado:</span>
+              <p id="total-saved" class="amount">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="piggy-list">
+          <h3>💰 Minhas Economias</h3>
+          <div id="piggy-items" class="expenses-grid">
+            <p class="empty-message">Nenhuma economia registrada</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Histórico -->
+    <section id="history" class="tab-content">
+      <div class="history-container">
+        <h2>Histórico de Gastos</h2>
+        
+        <div class="filter-group">
+          <input type="month" id="history-month" placeholder="Filtrar por mês">
+          <button id="clear-filter" class="btn-secondary">Limpar Filtro</button>
+        </div>
+
+        <div id="all-expenses" class="expenses-list">
+          <p class="empty-message">Carregando...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparação -->
+    <section id="comparison" class="tab-content">
+      <div class="comparison-container">
+        <h2>Comparação de Meses</h2>
+        <div class="chart-container">
+          <canvas id="comparisonChart"></canvas>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Botão Flutuante para Adicionar Gasto -->
+  <button id="fab-add-expense" class="fab-button" title="Adicionar gasto rápido">
+    <span class="fab-icon">➕</span>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

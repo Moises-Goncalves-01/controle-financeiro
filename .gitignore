@@ -1,0 +1,17 @@
+node_modules/
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+!.env.example
+coverage/
+dist/
+.readme-demo/
+server-demo.out.log
+server-demo.err.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
