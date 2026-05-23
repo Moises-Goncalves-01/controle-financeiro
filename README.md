@@ -41,7 +41,6 @@ Aplicacao web para registrar renda, acompanhar gastos mensais e separar valores 
     `-- screenshots/
 ```
 
-Os arquivos sensiveis e locais, como banco de dados, `.env`, dependencias instaladas e artefatos temporarios, ficam fora do versionamento.
 
 ## Como executar localmente
 
