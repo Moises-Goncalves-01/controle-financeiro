@@ -71,5 +71,4 @@ Depois, abra `http://localhost:3000`.
 
 ## Observacoes
 
-- o banco SQLite e criado localmente e nao deve ser publicado
-- o projeto pode evoluir depois para variaveis de ambiente e banco externo sem expor dados pessoais
+- o banco SQLite criado localmente nao foi publicado 
